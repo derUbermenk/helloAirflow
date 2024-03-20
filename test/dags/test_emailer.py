@@ -1,4 +1,3 @@
-import pytest 
 from dags.emailer import emailer
 from airflow.utils.dag_cycle_tester import check_cycle 
 from airflow.providers.docker.operators.docker import DockerOperator

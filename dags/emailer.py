@@ -4,7 +4,9 @@ from airflow.providers.docker.operators.docker import DockerOperator
 
 emailer = DAG(
     dag_id="emailer",
-    start_date=datetime.datetime(2021,1,1),
+    description = "pseudo sends emails. just saves to csv",
+    start_date=datetime.datetime(2022,1,1),
+    end_date=datetime.datetime(2024,2,1),
     schedule="@daily"
 )
 

@@ -12,13 +12,13 @@ emailer = DAG(
 
 format_emails = DockerOperator(
     task_id = "format_emails",
-    image = "format_emails:latest",
+    image = "format_emails",
     dag=emailer
 ) 
 
 pseudo_send_emails = DockerOperator(
     task_id = "pseudo_send_emails",
-    image = "pseudo_send_emails:latest",
+    image = "pseudo_send_emails",
     dag=emailer
 )
 

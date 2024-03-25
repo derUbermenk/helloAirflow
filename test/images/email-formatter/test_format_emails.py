@@ -8,6 +8,8 @@ def test_initializeFormatter():
     args = [path_to_users, date_string]
     formatter = initializeFormatter(args)
 
+    assert isinstance(formatter, EmailFormatter)
+
     assert formatter.path_to_users, path_to_users
     assert formatter.ds, date_string
 
@@ -48,6 +50,4 @@ def test_run_1(mocker):
 
     # should call saveToJSON() once
     mock_saveToJSON.assert_called_once()
-
-    return
 

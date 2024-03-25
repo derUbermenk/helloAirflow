@@ -1,6 +1,6 @@
 import argparse
 from string import Formatter
-import pandas
+import pandas as pd
 
 class EmailFormatter():
     def __init__(self, path_to_users: str, ds: str):
@@ -8,17 +8,20 @@ class EmailFormatter():
         self.ds = ds
         return
 
-    def load_user_info(self):
-        return
+    def load_user_info(self) -> pd.DataFrame:
+        return pd.DataFrame() 
 
-    def formatEmail(self):
-        return
+    def formatEmails(self, users: pd.DataFrame) -> dict:
+        return {} 
 
-    def saveToJSON(self):
+    def saveToJSON(self, emails: dict):
         return
 
     def run(self):
-        return
+        users = self.load_user_info()
+        emails = self.formatEmails(users)
+        self.saveToJSON(emails)
+
 
 
 def initializeFormatter(args) -> EmailFormatter:

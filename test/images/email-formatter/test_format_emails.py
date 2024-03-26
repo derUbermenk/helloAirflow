@@ -1,8 +1,10 @@
 from datetime import datetime
+import tempfile
+import os
+import json
 
 from pandas import DataFrame
 from images.emailFormatter.scripts.format_emails import EmailFormatter, initializeFormatter
-from pytest_mock import mocker
 from unittest.mock import MagicMock
 
 def test_initializeFormatter():
@@ -38,7 +40,8 @@ def test_run_1(mocker):
 
     path_to_users= "/path/to/users.csv"
     date_string = "2024-02-01"
-    formatter = EmailFormatter(path_to_users, date_string) 
+    save_dir = tempfile.TemporaryDirectory()
+    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
     mock_load_user_info = mocker.patch.object(formatter, 'load_user_info')
     mock_formatEmails = mocker.patch.object(formatter, 'formatEmails')
@@ -57,7 +60,8 @@ def test_run_1(mocker):
 def  test_load_user_info(mocker):
     path_to_users= "/path/to/users.csv"
     date_string = "2024-02-01"
-    formatter = EmailFormatter(path_to_users, date_string) 
+    save_dir = tempfile.TemporaryDirectory()
+    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
     mocked_read_csv = MagicMock(return_value=DataFrame())
     mocker.patch('pandas.read_csv', new=mocked_read_csv)
@@ -79,7 +83,8 @@ def test_formatEmails():
 
     path_to_users= "/path/to/users.csv"
     date_string = "2024-02-01"
-    formatter = EmailFormatter(path_to_users, date_string) 
+    save_dir = tempfile.TemporaryDirectory()
+    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
     expected_emails = {
         "alice@example.com": "\n2024-02-01\nalice@example.com\n\nDear Alice,\n\nI hope this email finds you well and that your tuna consumption has been satisfactory!\nWe're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals.",
@@ -91,4 +96,44 @@ def test_formatEmails():
     assert observed_emails["alice@example.com"] == expected_emails["alice@example.com"] 
     assert observed_emails["bob@example.com"] == expected_emails["bob@example.com"] 
     assert len(observed_emails.keys()) == len(expected_emails.keys())
+
+def test_saveToJSON():
+
+    emails = {
+        "alice@example.com": "\n2024-02-01\nalice@example.com\n\nDear Alice,\n\nI hope this email finds you well and that your tuna consumption has been satisfactory!\nWe're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals.",
+        "bob@example.com": "\n2024-02-01\nbob@example.com\n\nDear Bob,\n\nI hope this email finds you well and that your tuna consumption has been satisfactory!\nWe're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals."
+    }   
+
+    path_to_users= "path/to/users.csv"
+    date_string = "2024-02-01"
+    save_dir = tempfile.TemporaryDirectory()
+    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
+
+    formatter.saveToJSON(emails)
+
+    # it saves a dict to a json file
+    expected_file_path = save_dir.name + "/2024-02-01_emails.json"
+    assert os.path.exists(expected_file_path) == True
+
+    with open(expected_file_path, 'r') as json_file:
+        saved_emails = json.load(json_file)
+
+    assert emails == saved_emails 
+
+    # it overwrites any json file with same name
+    new_emails = {
+        "bob@example.com": "\n2024-02-01\nbob@example.com\n\nDear Bob,\n\nI hope this email finds you well and that your tuna consumption has been satisfactory!\nWe're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals."
+    }   
+
+    formatter.saveToJSON(new_emails)
+
+    # it saves a dict to a json file
+    expected_file_path = save_dir.name + "/2024-02-01_emails.json"
+    assert os.path.exists(expected_file_path) == True
+
+    with open(expected_file_path, 'r') as json_file:
+        saved_new_emails = json.load(json_file)
+
+    assert new_emails == saved_new_emails 
+
 

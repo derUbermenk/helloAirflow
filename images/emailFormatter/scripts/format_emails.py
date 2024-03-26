@@ -1,4 +1,5 @@
 import argparse
+import email
 from string import Formatter
 import pandas as pd
 
@@ -9,10 +10,37 @@ class EmailFormatter():
         return
 
     def load_user_info(self) -> pd.DataFrame:
-        return pd.DataFrame() 
+        users = pd.read_csv(self.path_to_users)
+        return  users
 
     def formatEmails(self, users: pd.DataFrame) -> dict:
-        return {} 
+        emails = {}
+
+        # Define the template
+        template = """
+{ds}
+{email}
+
+Dear {user},
+
+I hope this email finds you well and that your tuna consumption has been satisfactory!
+We're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals."""
+
+        # Iterate over rows in the DataFrame
+        for index, row in users.iterrows():
+            email_=row['email']
+            user_=row['user']
+            # Substitute values in the template
+            email_content = template.format(
+                ds='2024-02-01',
+                email=email_,
+                user=user_
+            )
+
+            emails[email_] = email_content
+
+            
+        return emails 
 
     def saveToJSON(self, emails: dict):
         return

@@ -4,9 +4,10 @@ from string import Formatter
 import pandas as pd
 
 class EmailFormatter():
-    def __init__(self, path_to_users: str, ds: str):
+    def __init__(self, path_to_users: str, ds: str, save_path: str):
         self.path_to_users = path_to_users 
         self.ds = ds
+        self.save_path = save_path
         return
 
     def load_user_info(self) -> pd.DataFrame:

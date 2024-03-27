@@ -4,19 +4,38 @@ import os
 import json
 
 from pandas import DataFrame
+import pytest
 from images.emailFormatter.scripts.format_emails import EmailFormatter, initializeFormatter
 from unittest.mock import MagicMock
 
+@pytest.fixture
+def path_to_users(): 
+    return "/path/to/users.csv"
+
+@pytest.fixture
+def date_string():
+    return "2024-02-01"
+
+@pytest.fixture
+def save_dir():
+    return "/path/to/save_dir/"
+
+@pytest.fixture
+def emailFormatter():
+    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
+
+    return formatter
+
 def test_initializeFormatter():
-    date_string = "2024-02-01"
-    path_to_users= "/path/to/users.csv"
-    args = [path_to_users, date_string]
+    save_path = "some/save/path/"
+    args = [path_to_users, date_string, save_path]
     formatter = initializeFormatter(args)
 
     assert isinstance(formatter, EmailFormatter)
 
     assert formatter.path_to_users == path_to_users
     assert formatter.ds == date_string
+    assert formatter.save_path == save_path
 
 def test_run_1(mocker):
 
@@ -37,11 +56,7 @@ def test_run_1(mocker):
             # self.saveToJSON()
             return
     '''
-
-    path_to_users= "/path/to/users.csv"
-    date_string = "2024-02-01"
-    save_dir = tempfile.TemporaryDirectory()
-    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
+    formatter = emailFormatter
 
     mock_load_user_info = mocker.patch.object(formatter, 'load_user_info')
     mock_formatEmails = mocker.patch.object(formatter, 'formatEmails')
@@ -58,10 +73,7 @@ def test_run_1(mocker):
     mock_saveToJSON.assert_called_once()
 
 def  test_load_user_info(mocker):
-    path_to_users= "/path/to/users.csv"
-    date_string = "2024-02-01"
-    save_dir = tempfile.TemporaryDirectory()
-    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
+    formatter = emailFormatter
 
     mocked_read_csv = MagicMock(return_value=DataFrame())
     mocker.patch('pandas.read_csv', new=mocked_read_csv)
@@ -83,7 +95,7 @@ def test_formatEmails():
 
     path_to_users= "/path/to/users.csv"
     date_string = "2024-02-01"
-    save_dir = tempfile.TemporaryDirectory()
+    save_dir = tempfile.TemporaryDirectory().name
     formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
     expected_emails = {
@@ -104,15 +116,13 @@ def test_saveToJSON():
         "bob@example.com": "\n2024-02-01\nbob@example.com\n\nDear Bob,\n\nI hope this email finds you well and that your tuna consumption has been satisfactory!\nWe're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals."
     }   
 
-    path_to_users= "path/to/users.csv"
-    date_string = "2024-02-01"
-    save_dir = tempfile.TemporaryDirectory()
-    formatter = EmailFormatter(path_to_users, date_string, save_dir) 
+    save_path = tempfile.TemporaryDirectory()
+    formatter = EmailFormatter(path_to_users, date_string, save_path.name) 
 
     formatter.saveToJSON(emails)
 
     # it saves a dict to a json file
-    expected_file_path = save_dir.name + "/2024-02-01_emails.json"
+    expected_file_path = save_path.name + "/2024-02-01_emails.json"
     assert os.path.exists(expected_file_path) == True
 
     with open(expected_file_path, 'r') as json_file:

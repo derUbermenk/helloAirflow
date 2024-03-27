@@ -100,7 +100,7 @@ def test_saveToJSON():
 
     # it saves a dict to a json file
     expected_file_path = save_path.name + "/2024-02-01_emails.json"
-    assert os.path.exists(expected_file_path) == True, '{expected_file_path} must exist'
+    assert os.path.exists(expected_file_path) == True, f"{expected_file_path} must exist"
 
     with open(expected_file_path, 'r') as json_file:
         saved_emails = json.load(json_file)
@@ -116,7 +116,7 @@ def test_saveToJSON():
 
     # it saves a dict to a json file
     expected_file_path = save_path.name + "/2024-02-01_emails.json"
-    assert os.path.exists(expected_file_path) == True
+    assert os.path.exists(expected_file_path) == True, f"{expected_file_path} must exist"
 
     with open(expected_file_path, 'r') as json_file:
         saved_new_emails = json.load(json_file)

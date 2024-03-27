@@ -22,6 +22,24 @@ def test_initializeFormatter():
     assert formatter.ds == date_string
     assert formatter.save_path == save_dir 
 
+def test_checkFilePath():
+    temp_path = tempfile.TemporaryDirectory()
+    nonExistentFilePath = "/non/existent/path/"
+    existentFilePath = temp_path.name
+
+    # it exits with code 1 if path does not exist
+    with pytest.raises(SystemExit) as e:
+        checkFilePath(nonExistentFilePath)
+
+    assert e.type == SystemExit
+    assert e.value.code == 1
+
+    # it does not exit if path exist
+    with pytest.raises(SystemExit) as e:
+        checkFilePath(existentFilePath)
+
+    assert e.type != SystemExit
+
 def test_run_1(mocker):
     path_to_users = "/path/to/users.csv"
     date_string = "2024-02-01"

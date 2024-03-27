@@ -60,9 +60,10 @@ def initializeFormatter(args) -> EmailFormatter:
     
     parser.add_argument('path_to_users', help="path to csv file")
     parser.add_argument('ds', help="execution date")
+    parser.add_argument('save_dir', help="save directory")
 
     _args = parser.parse_args(args)
 
-    formatter = EmailFormatter(_args.path_to_users, _args.ds)
+    formatter = EmailFormatter(_args.path_to_users, _args.ds, _args.save_dir)
 
     return formatter 

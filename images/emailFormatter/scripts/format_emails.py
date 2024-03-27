@@ -2,6 +2,7 @@ import argparse
 import email
 from string import Formatter
 import pandas as pd
+import json
 
 class EmailFormatter():
     def __init__(self, path_to_users: str, ds: str, save_path: str):
@@ -44,7 +45,9 @@ We're reaching out to let you know that the warranty on your last can of tuna is
         return emails 
 
     def saveToJSON(self, emails: dict):
-        return
+        file_path = self.save_path + f"/{self.ds}_emails.json"
+        with open(file_path, 'w') as json_file:
+            json.dump(emails, json_file)
 
     def run(self):
         users = self.load_user_info()

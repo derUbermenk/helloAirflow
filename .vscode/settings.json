@@ -1,5 +1,10 @@
 {
     "python.defaultInterpreterPath": ".helloAirflow/bin/python",
     "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        ".helloAirflow": true
+    }
 }

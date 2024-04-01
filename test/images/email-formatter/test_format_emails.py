@@ -5,7 +5,7 @@ import json
 
 from pandas import DataFrame
 import pytest
-from images.emailFormatter.scripts.format_emails import EmailFormatter, initializeFormatter
+from images.emailFormatter.scripts.format_emails import EmailFormatter, initializeFormatter, checkFilePath
 from unittest.mock import MagicMock
 
 def test_initializeFormatter():
@@ -28,17 +28,21 @@ def test_checkFilePath():
     existentFilePath = temp_path.name
 
     # it exits with code 1 if path does not exist
-    with pytest.raises(SystemExit) as e:
+    try:
         checkFilePath(nonExistentFilePath)
-
-    assert e.type == SystemExit
-    assert e.value.code == 1
+    except SystemExit as e:
+        assert True 
+        assert e.code == 1
+    else:
+        assert False 
 
     # it does not exit if path exist
-    with pytest.raises(SystemExit) as e:
+    try:
         checkFilePath(existentFilePath)
-
-    assert e.type != SystemExit
+    except SystemExit as e:
+        assert False
+    else:
+        assert True
 
 def test_run_1(mocker):
     path_to_users = "/path/to/users.csv"

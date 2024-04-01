@@ -1,8 +1,11 @@
 import argparse
 import email
+from genericpath import exists
 from string import Formatter
+import sys
 import pandas as pd
 import json
+import os
 
 class EmailFormatter():
     def __init__(self, path_to_users: str, ds: str, save_path: str):
@@ -54,7 +57,11 @@ We're reaching out to let you know that the warranty on your last can of tuna is
         emails = self.formatEmails(users)
         self.saveToJSON(emails)
 
-
+def checkFilePath(filePath: str):
+    if os.path.exists(filePath):
+        return
+    else:
+        sys.exit(1)
 
 def initializeFormatter(args) -> EmailFormatter:
     parser = argparse.ArgumentParser(

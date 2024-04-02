@@ -1,4 +1,5 @@
 import tempfile
+from images.emailSender.scripts.send_emails import checkPath
 
 def test_checkPath():
     temp_path = tempfile.TemporaryDirectory()

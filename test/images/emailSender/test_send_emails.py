@@ -3,10 +3,21 @@ from images.emailSender.scripts.send_emails import checkPath
 
 def test_checkPath():
     temp_path = tempfile.TemporaryDirectory()
-    nonExistentFilePath = "/non/existent/path/"
-    existentFilePath = temp_path.name
+    temp_file = tempfile.NamedTemporaryFile()
+    nonExistentPath = "/non/existent/path/"
+    existentPath = temp_path.name
+    nonExistentFilePath = "/non/existent/file/this.json"
+    existentFilePath = temp_file.name 
 
-    # exists with code 1 if path does not exist
+    # exists with code 1 if path or file does not exist
+    try:
+        checkPath(nonExistentPath)
+    except SystemExit as e:
+        assert True 
+        assert e.code == 1
+    else:
+        assert False 
+
     try:
         checkPath(nonExistentFilePath)
     except SystemExit as e:
@@ -16,6 +27,13 @@ def test_checkPath():
         assert False 
 
     # does not exist if path exists
+    try:
+        checkPath(existentPath)
+    except SystemExit as e:
+        assert False
+    else:
+        assert True
+
     try:
         checkPath(existentFilePath)
     except SystemExit as e:

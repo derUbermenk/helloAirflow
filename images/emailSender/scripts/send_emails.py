@@ -16,7 +16,7 @@ class EmailSender():
         log_file_name = f"{self.path_to_logs}/{self.ds}_logs.log"
 
         logging.basicConfig(filename=log_file_name, level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+                    format='%(asctime)s - %(levelname)s - %(message)s', force=True)
 
         logging.info("Preparing Emails")
 

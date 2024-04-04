@@ -1,5 +1,5 @@
 import tempfile
-from images.emailSender.scripts.send_emails import checkPath
+from images.emailSender.scripts.send_emails import checkPath, initializeSender, EmailSender
 
 def test_checkPath():
     temp_path = tempfile.TemporaryDirectory()
@@ -49,6 +49,8 @@ def test_initializeSender():
     args = [ds, path_to_emails, path_to_logs]
     sender = initializeSender(args)
 
+
+    # returns an instance of EmailSender
     assert isinstance(sender, EmailSender)
 
     assert sender.ds == ds

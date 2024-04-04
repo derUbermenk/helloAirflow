@@ -4,7 +4,10 @@ import os
 import sys
 
 class EmailSender():
-    def __init__(self):
+    def __init__(self, ds, path_to_emails, path_to_logs):
+        self.ds = ds 
+        self.path_to_emails = path_to_emails
+        self.path_to_logs = path_to_logs
         return
 
 def checkPath(filePath: str):

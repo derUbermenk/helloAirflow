@@ -61,7 +61,7 @@ def test_run_1(mocker):
     temp_path = tempfile.TemporaryDirectory()
 
     ds = "2024-02-01"
-    expected_log_path = temp_path.name + "/{ds}_log.log"
+    expected_log_path = temp_path.name + f"/{ds}_logs.log"
     path_to_logs = temp_path.name
     path_to_emails = "/path/to/emails"
 
@@ -73,8 +73,6 @@ def test_run_1(mocker):
 
     mock_load_emails.assert_called_once()
     mock_send_emails.assert_called_once()
-
-    print(expected_log_path)
 
     # outputs a log file with format ds_logs.log
     assert os.path.exists(expected_log_path) == True

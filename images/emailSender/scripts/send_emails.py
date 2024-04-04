@@ -3,6 +3,7 @@ from genericpath import isfile
 import os
 import sys
 import logging
+import pdb
 
 class EmailSender():
     def __init__(self, ds, path_to_emails, path_to_logs):
@@ -12,7 +13,7 @@ class EmailSender():
         return
 
     def run(self):
-        log_file_name = "{path_to_logs}/{ds}_logs.log"
+        log_file_name = f"{self.path_to_logs}/{self.ds}_logs.log"
 
         logging.basicConfig(filename=log_file_name, level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')

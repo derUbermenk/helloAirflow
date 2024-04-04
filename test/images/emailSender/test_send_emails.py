@@ -1,4 +1,5 @@
 import tempfile
+import os
 from images.emailSender.scripts.send_emails import checkPath, initializeSender, EmailSender
 
 def test_checkPath():
@@ -43,12 +44,11 @@ def test_checkPath():
 
 def test_initializeSender():
     ds = "2024-02-01"
-    path_to_emails = "/path/to/emails/"
+    path_to_emails = "/path/to/emails"
     path_to_logs = "/path/to/logs"
 
     args = [ds, path_to_emails, path_to_logs]
     sender = initializeSender(args)
-
 
     # returns an instance of EmailSender
     assert isinstance(sender, EmailSender)
@@ -57,3 +57,24 @@ def test_initializeSender():
     assert sender.path_to_emails == path_to_emails
     assert sender.path_to_logs == path_to_logs
 
+def test_run_1(mocker):
+    temp_path = tempfile.TemporaryDirectory()
+
+    ds = "2024-02-01"
+    expected_log_path = temp_path.name + "/{ds}_log.log"
+    path_to_logs = temp_path.name
+    path_to_emails = "/path/to/emails"
+
+    sender = EmailSender(ds, path_to_emails, path_to_logs)
+    mock_load_emails = mocker.patch.object(sender, 'load_emails')
+    mock_send_emails = mocker.patch.object(sender, 'send_emails')
+
+    sender.run()
+
+    mock_load_emails.assert_called_once()
+    mock_send_emails.assert_called_once()
+
+    print(expected_log_path)
+
+    # outputs a log file with format ds_logs.log
+    assert os.path.exists(expected_log_path) == True

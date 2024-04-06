@@ -1,8 +1,10 @@
 import argparse
+from ast import arg
 import email
 from genericpath import exists
 from string import Formatter
 import sys
+from tabnanny import check
 import pandas as pd
 import json
 import os
@@ -76,4 +78,13 @@ def initializeFormatter(args) -> EmailFormatter:
 
     formatter = EmailFormatter(_args.path_to_users, _args.ds, _args.save_dir)
 
+    checkFilePath(formatter.path_to_users)
+
     return formatter 
+
+def main(args):
+    formatter = initializeFormatter(args)
+    formatter.run()
+    
+if __name__ == "__main__":
+    main(sys.argv[1:])

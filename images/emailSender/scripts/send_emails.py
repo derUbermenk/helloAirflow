@@ -13,9 +13,7 @@ class EmailSender():
         return
 
     def run(self):
-        log_file_name = f"{self.path_to_logs}/{self.ds}_logs.log"
-
-        logging.basicConfig(filename=log_file_name, level=logging.INFO,
+        logging.basicConfig(filename=self.path_to_logs, level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s', force=True)
 
         logging.info("Preparing Emails")
@@ -26,15 +24,13 @@ class EmailSender():
         logging.info("Done Sending emails")
 
     def load_emails(self) -> dict:
-        return
+        return 
 
     def send_emails(self, emails: dict):
         return
 
 def checkPath(filePath: str):
-    if os.path.isfile(filePath):
-        return
-    elif os.path.exists(filePath):
+    if os.path.exists(filePath):
         return
     else:
         sys.exit(1)

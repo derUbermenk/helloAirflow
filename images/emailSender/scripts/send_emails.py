@@ -41,6 +41,7 @@ def checkPath(filePath: str):
     if os.path.exists(filePath):
         return
     else:
+        logging.error("Path {filePath} does not exit, ending program")
         sys.exit(1)
 
 def initializeSender(args) -> EmailSender:
@@ -55,5 +56,15 @@ def initializeSender(args) -> EmailSender:
 
     _args = parser.parse_args(args)
 
+    checkPath(_args.path_to_emails)
+
     sender = EmailSender(_args.ds, _args.path_to_emails, _args.path_to_logs)
     return sender
+
+def main(args):
+    sender = initializeSender(args)
+    sender.run()
+
+if __name__ == '__main__':
+    # [1:] to not include name program name in list of args 
+    main(sys.argv[1:])

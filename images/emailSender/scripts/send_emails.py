@@ -41,7 +41,7 @@ def checkPath(filePath: str):
     if os.path.exists(filePath):
         return
     else:
-        logging.error("Path {filePath} does not exit, ending program")
+        logging.error(f"Path {filePath} does not exit, ending program")
         sys.exit(1)
 
 def initializeSender(args) -> EmailSender:

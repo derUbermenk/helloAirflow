@@ -76,3 +76,19 @@ def test_run_1(mocker):
 
     # outputs a log file with format ds_logs.log
     assert os.path.exists(expected_log_path) == True
+
+def test_load_emails(mocker):
+    ds = "2024-02-01"
+    path_to_emails = "/path/to/emails"
+    path_to_logs = "/path/to/logs"
+
+    expected_emails = {
+        "email1": "email message",
+        "email2": "email message"
+    }
+    mock_jsonLoad = mocker.patch('json.loads', return_value = expected_emails)
+
+    sender = EmailSender(ds, path_to_emails, path_to_logs)
+    emails = sender.load_emails()
+
+    assert isinstance(emails, dict)

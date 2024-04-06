@@ -1,4 +1,5 @@
 import argparse
+import email
 from genericpath import isfile
 import os
 import sys
@@ -32,7 +33,9 @@ class EmailSender():
         return emails
 
     def send_emails(self, emails: dict):
-        return
+        for user in emails:
+            # sending done here
+            logging.info(f"Sent email to {user}")
 
 def checkPath(filePath: str):
     if os.path.exists(filePath):

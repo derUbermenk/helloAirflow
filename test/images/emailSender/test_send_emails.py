@@ -2,6 +2,7 @@ import email
 import tempfile
 import os
 from images.emailSender.scripts.send_emails import checkPath, initializeSender, EmailSender
+from unittest.mock import call
 
 def test_checkPath():
     temp_path = tempfile.TemporaryDirectory()
@@ -102,5 +103,5 @@ def test_send_emails(mocker):
 
     sender.send_emails(emails)
 
-    mock_logging.assert_called_once_with(f"Sent email to {user1}")
-    mock_logging.assert_called_once_with(f"Sent email to {user2}")
+    assert mock_logging.call_args_list == [call(f"Sent email to {user1}"), call(f"Sent email to {user2}")]
+    assert mock_logging.call_count == 2

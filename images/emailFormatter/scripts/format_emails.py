@@ -50,7 +50,7 @@ We're reaching out to let you know that the warranty on your last can of tuna is
         return emails 
 
     def saveToJSON(self, emails: dict):
-        file_path = self.save_path + f"/{self.ds}_emails.json"
+        file_path = self.save_path
         with open(file_path, 'w') as json_file:
             json.dump(emails, json_file)
 

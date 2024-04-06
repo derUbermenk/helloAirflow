@@ -44,7 +44,7 @@ def test_run_1(mocker):
 
     ds = "2024-02-01"
     expected_log_path = temp_path.name + f"/{ds}_logs.log"
-    path_to_logs = temp_path.name
+    path_to_logs = temp_path.name + f"/{ds}_logs.log"
     path_to_emails = "/path/to/emails.json"
 
     sender = EmailSender(ds, path_to_emails, path_to_logs)
@@ -60,9 +60,13 @@ def test_run_1(mocker):
     assert os.path.exists(expected_log_path) == True
 
 def test_load_emails(mocker):
+    temp_dir = tempfile.TemporaryDirectory()
+
     ds = "2024-02-01"
-    path_to_emails = "/path/to/emails.json"
-    path_to_logs = "/path/to/logs"
+    path_to_emails = os.path.join(temp_dir.name, f"{ds}_emails.json") 
+    path_to_logs = f"path/to/{ds}_logs.log"
+
+    f = open(path_to_emails, "w")
 
     expected_emails = {
         "email1": "email message",
@@ -74,3 +78,5 @@ def test_load_emails(mocker):
     emails = sender.load_emails()
 
     assert isinstance(emails, dict)
+
+    f.close()

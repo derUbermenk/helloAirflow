@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import pdb
+import json
 
 class EmailSender():
     def __init__(self, ds, path_to_emails, path_to_logs):
@@ -24,7 +25,11 @@ class EmailSender():
         logging.info("Done Sending emails")
 
     def load_emails(self) -> dict:
-        return 
+        with open(self.path_to_emails, 'r') as file:
+            # Load JSON data into a dictionary
+            emails = json.load(file)
+
+        return emails
 
     def send_emails(self, emails: dict):
         return

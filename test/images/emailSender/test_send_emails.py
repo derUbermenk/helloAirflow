@@ -23,10 +23,13 @@ def test_checkPath(mocker):
     mock_sysExit.assert_called()
 
 
-def test_initializeSender():
+def test_initializeSender(mocker):
     ds = "2024-02-01"
     path_to_emails = "/path/to/emails.json"
     path_to_logs = "/path/to/logs.log"
+
+    checkPath_importPath = "images.emailSender.scripts.send_emails.checkPath" 
+    mocker.patch(checkPath_importPath)
 
     args = [ds, path_to_emails, path_to_logs]
     sender = initializeSender(args)

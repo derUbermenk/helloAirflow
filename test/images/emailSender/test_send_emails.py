@@ -1,3 +1,4 @@
+import email
 import tempfile
 import os
 from images.emailSender.scripts.send_emails import checkPath, initializeSender, EmailSender
@@ -81,3 +82,25 @@ def test_load_emails(mocker):
         assert isinstance(emails, dict)
     finally:
         f.close()
+    
+def test_send_emails(mocker):
+    ds = "2024-02-01"
+    path_to_logs = "path/to/logs.log"
+    path_to_emails = "/path/to/emails.json"
+
+    sender = EmailSender(ds, path_to_emails, path_to_logs)    
+
+    user1 = "user1@email.com"
+    user2 = "user2@email.com"
+    message = "email message",
+    emails = {
+        user1: message,
+        user2: message
+    }
+
+    mock_logging = mocker.patch('logging.info')
+
+    sender.send_emails(emails)
+
+    mock_logging.assert_called_once_with(f"Sent email to {user1}")
+    mock_logging.assert_called_once_with(f"Sent email to {user2}")

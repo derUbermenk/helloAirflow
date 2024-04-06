@@ -68,15 +68,16 @@ def test_load_emails(mocker):
 
     f = open(path_to_emails, "w")
 
-    expected_emails = {
-        "email1": "email message",
-        "email2": "email message"
-    }
-    mock_jsonLoad = mocker.patch('json.loads', return_value = expected_emails)
+    try:
+        expected_emails = {
+            "email1": "email message",
+            "email2": "email message"
+        }
+        mock_jsonLoad = mocker.patch('json.loads', return_value = expected_emails)
 
-    sender = EmailSender(ds, path_to_emails, path_to_logs)
-    emails = sender.load_emails()
+        sender = EmailSender(ds, path_to_emails, path_to_logs)
+        emails = sender.load_emails()
 
-    assert isinstance(emails, dict)
-
-    f.close()
+        assert isinstance(emails, dict)
+    finally:
+        f.close()

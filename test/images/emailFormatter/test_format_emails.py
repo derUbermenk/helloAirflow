@@ -8,10 +8,13 @@ import pytest
 from images.emailFormatter.scripts.format_emails import EmailFormatter, initializeFormatter, checkFilePath
 from unittest.mock import MagicMock
 
-def test_initializeFormatter():
+def test_initializeFormatter(mocker):
     path_to_users = "/path/to/users.csv"
     date_string = "2024-02-01"
-    save_dir = "/path/to/save_dir/"
+    save_dir = "/path/to/save_dir/emails.json"
+
+    checkPathImportPath = "images.emailFormatter.scripts.format_emails.checkFilePath"
+    mocker.patch(checkPathImportPath)
 
     args = [path_to_users, date_string, save_dir]
     formatter = initializeFormatter(args)
@@ -47,7 +50,7 @@ def test_checkFilePath():
 def test_run_1(mocker):
     path_to_users = "/path/to/users.csv"
     date_string = "2024-02-01"
-    save_dir = "/path/to/save_dir/"
+    save_dir = "/path/to/save_dir/emails.json"
 
     formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
@@ -68,7 +71,7 @@ def test_run_1(mocker):
 def test_load_user_info(mocker):
     path_to_users = "/path/to/users.csv"
     date_string = "2024-02-01"
-    save_dir = "/path/to/save_dir/"
+    save_dir = "/path/to/save_dir/emails.json"
 
     formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
@@ -92,7 +95,7 @@ def test_formatEmails():
 
     path_to_users= "/path/to/users.csv"
     date_string = "2024-02-01"
-    save_dir = "/path/to/save_dir/"
+    save_dir = "/path/to/save_dir/emails.json"
     formatter = EmailFormatter(path_to_users, date_string, save_dir) 
 
     expected_emails = {
@@ -113,15 +116,16 @@ def test_saveToJSON():
         "bob@example.com": "\n2024-02-01\nbob@example.com\n\nDear Bob,\n\nI hope this email finds you well and that your tuna consumption has been satisfactory!\nWe're reaching out to let you know that the warranty on your last can of tuna is about to expire. Yes, that's right, your extended tuna warranty is coming to an end. Don't panic just yet, though! You still have time to renew and ensure your peace of mind when it comes to enjoying delicious tuna meals."
     }   
 
+    tmp_dir = tempfile.TemporaryDirectory()
     path_to_users= "/path/to/users.csv"
     date_string = "2024-02-01"
-    save_path = tempfile.TemporaryDirectory()
-    formatter = EmailFormatter(path_to_users, date_string, save_path.name) 
+    save_path = os.path.join(tmp_dir.name, f"{date_string}_emails.json") 
+    formatter = EmailFormatter(path_to_users, date_string, save_path) 
 
     formatter.saveToJSON(emails)
 
     # it saves a dict to a json file
-    expected_file_path = save_path.name + "/2024-02-01_emails.json"
+    expected_file_path = save_path
     assert os.path.exists(expected_file_path) == True, f"{expected_file_path} must exist"
 
     with open(expected_file_path, 'r') as json_file:
@@ -137,7 +141,7 @@ def test_saveToJSON():
     formatter.saveToJSON(new_emails)
 
     # it saves a dict to a json file
-    expected_file_path = save_path.name + "/2024-02-01_emails.json"
+    expected_file_path = save_path
     assert os.path.exists(expected_file_path) == True, f"{expected_file_path} must exist"
 
     with open(expected_file_path, 'r') as json_file:

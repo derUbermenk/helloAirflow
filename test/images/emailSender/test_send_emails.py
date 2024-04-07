@@ -1,35 +1,35 @@
 import email
 import tempfile
 import os
+from unittest import mock
 from images.emailSender.scripts.send_emails import checkPath, initializeSender, EmailSender
 from unittest.mock import call
 
-def test_checkPath():
+def test_checkPath(mocker):
     temp_path = tempfile.TemporaryDirectory()
     nonExistentPath = "/non/existent/path/"
     existentPath = temp_path.name
 
     # exists with code 1 if path or file does not exist
-    try:
-        checkPath(nonExistentPath)
-    except SystemExit as e:
-        assert True 
-        assert e.code == 1
-    else:
-        assert False 
+    mock_loggingError = mocker.patch("logging.error")
+    mock_sysExit = mocker.patch("sys.exit")
+        
+    checkPath(nonExistentPath)
+    mock_loggingError.assert_called_once_with(f"Path {nonExistentPath} does not exit, ending program")
+    mock_sysExit.assert_called_once_with(1)
 
-    # does not exist if path exists
-    try:
-        checkPath(existentPath)
-    except SystemExit as e:
-        assert False
-    else:
-        assert True
+    checkPath(existentPath)
+    mock_loggingError.assert_called()
+    mock_sysExit.assert_called()
 
-def test_initializeSender():
+
+def test_initializeSender(mocker):
     ds = "2024-02-01"
     path_to_emails = "/path/to/emails.json"
     path_to_logs = "/path/to/logs.log"
+
+    checkPath_importPath = "images.emailSender.scripts.send_emails.checkPath" 
+    mocker.patch(checkPath_importPath)
 
     args = [ds, path_to_emails, path_to_logs]
     sender = initializeSender(args)

@@ -21,5 +21,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r .requirements.txt
 
+      - name: Go to images dir
+        run: cd images/
+
       - name: Run pytest tests
-        run: pytest test/
+        run: pytest ../test/

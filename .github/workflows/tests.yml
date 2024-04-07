@@ -21,11 +21,5 @@ jobs:
       - name: Install dependencies
         run: pip install -r .requirements.txt
 
-      - name: Add app dirs to ptyhon path
-        run: export PYTHONPATH="$PYTHONPATH:/$(pwd)/images"
-
-      - name: Add app dirs to ptyhon path
-        run: echo PYTHONPATH
-
       - name: Run pytest tests
-        run: pytest test/
+        run: python -m pytest tests/

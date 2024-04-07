@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r .requirements.txt
 
-      - name: Go to images dir
-        run: cd images/
+      - name: echo pwd 
+        run: echo pwd
 
       - name: Run pytest tests
         run: pytest ../test/

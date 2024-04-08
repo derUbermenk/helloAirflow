@@ -16,10 +16,10 @@ format_emails = DockerOperator(
     dag=emailer
 ) 
 
-pseudo_send_emails = DockerOperator(
-    task_id = "pseudo_send_emails",
-    image = "pseudo_send_emails",
+send_emails = DockerOperator(
+    task_id = "send_emails",
+    image = "send_emails",
     dag=emailer
 )
 
-format_emails >> pseudo_send_emails 
+format_emails >> send_emails 

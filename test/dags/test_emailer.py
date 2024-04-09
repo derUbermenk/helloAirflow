@@ -18,7 +18,7 @@ def test_dag_tasks():
 
     expected_task_ids = [
         "format_emails",
-        "pseudo_send_emails"
+        "send_emails"
     ]
 
     assert task_ids == expected_task_ids, "dag should have all expected tasks"

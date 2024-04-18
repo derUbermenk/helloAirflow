@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import datetime
 from airflow import DAG
 from airflow.providers.docker.operators.docker import DockerOperator

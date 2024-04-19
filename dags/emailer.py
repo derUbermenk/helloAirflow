@@ -45,10 +45,4 @@ send_emails = DockerOperator(
     ]
 )
 
-send_emails = DockerOperator(
-    task_id = "send_emails",
-    image = "send_emails",
-    dag=emailer
-)
-
 format_emails >> send_emails

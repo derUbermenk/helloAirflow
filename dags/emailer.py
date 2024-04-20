@@ -10,7 +10,7 @@ emailer = DAG(
     description = "pseudo sends emails. just saves to csv",
     start_date=datetime.datetime(2022,1,1),
     end_date=datetime.datetime(2024,2,1),
-    schedule="@daily"
+    schedule_interval="@daily"
 )
 
 format_emails = DockerOperator(

@@ -8,8 +8,8 @@ from docker.types import Mount
 emailer = DAG(
     dag_id="emailer",
     description = "pseudo sends emails. just saves to csv",
-    start_date=datetime.datetime(2022,1,1),
-    end_date=datetime.datetime(2024,2,1),
+    start_date=datetime.datetime(2024,4,19),
+    end_date=datetime.datetime(2024,6,1),
     schedule_interval="@daily"
 )
 

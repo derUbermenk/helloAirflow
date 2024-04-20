@@ -7,6 +7,7 @@ x-environment: &airflow_environment
   - AIRFLOW__CORE__STORE_DAG_CODE=True
   - AIRFLOW__CORE__STORE_SERIALIZED_DAGS=True
   - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=True
+  - AIRFLOW__CORE__ENABLE_XCOM_PICKLING=True
 
 x-airflow-image: &airflow_image apache/airflow:2.9.0-python3.10
 # ====================================== /AIRFLOW ENVIRONMENT VARIABLES ======================================
@@ -28,7 +29,7 @@ services:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
-      image: helloAirflow/airflow-docker
+    image: helloAirflow/airflow-docker
     container_name: helloAirflow_init
     restart: always
     depends_on:
@@ -42,7 +43,7 @@ services:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
-      image: helloAirflow/airflow-docker
+    image: helloAirflow/airflow-docker
     container_name: helloAirflow_webserver 
     restart: always
     depends_on:
@@ -59,7 +60,7 @@ services:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
-      image: helloAirflow/airflow-docker
+    image: helloAirflow/airflow-docker
     container_name: helloAirflow_scheduler 
     restart: always
     depends_on:

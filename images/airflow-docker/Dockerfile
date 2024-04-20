@@ -1,7 +1,9 @@
 ARG AIRFLOW_BASE_IMAGE="apache/airflow:2.9.0-python3.10"
 FROM ${AIRFLOW_BASE_IMAGE}
 
-RUN pip install --no-cache-dir apache-airflow-providers-docker==3.9.2
+# downgraded to 1.1.0 due to issue with mount 
+# RUN pip install --no-cache-dir apache-airflow-providers-docker==3.9.2
+RUN pip install --no-cache-dir apache-airflow-providers-docker==1.1.0
 
 # Note we need to run Airflow as root in this case, as Airflow needs to
 # have sufficient priviledges to access /var/run/docker.sock.

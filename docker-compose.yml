@@ -51,6 +51,7 @@ services:
     volumes:
       - logs:/opt/airflow/logs
       - ./dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
     environment: *airflow_environment
     command: scheduler
 

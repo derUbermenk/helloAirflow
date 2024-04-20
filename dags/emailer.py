@@ -8,8 +8,8 @@ from docker.types import Mount
 emailer = DAG(
     dag_id="emailer",
     description = "pseudo sends emails. just saves to csv",
-    start_date=datetime.datetime(2022,1,1),
-    end_date=datetime.datetime(2024,2,1),
+    start_date=datetime.datetime(2024,4,19),
+    end_date=datetime.datetime(2024,6,1),
     schedule_interval="@daily"
 )
 
@@ -19,13 +19,17 @@ format_emails = DockerOperator(
     dag=emailer,
     command = [
         "format_emails",
-        "./users/users.csv"
+        "./users/users.csv",
         "{{ds}}",
         "./emails/{{ds}}_emails.json"
     ],
-    mounts = [
-        Mount(source="../volumes/emails", target="/emails", type="bind"),
-        Mount(source="../volumes/users", target="/users", type="bind"),
+    #mounts = [
+    #    Mount(source="../volumes/emails", target="/emails", type="bind"),
+    #    Mount(source="../volumes/users", target="/users", type="bind"),
+    #]
+    volumes = [
+    "/home/admini/Documents/projects/helloAirflow/volumes/emails:/emails",
+    "/home/admini/Documents/projects/helloAirflow/volumes/users:/users"
     ]
 )
 
@@ -39,9 +43,13 @@ send_emails = DockerOperator(
         "./emails/{{ds}}_emails.json",
         "./logs/{{ds}}_logs.log"
     ],
-    mounts = [
-        Mount(source="../volumes/emails", target="/emails", type="bind"),
-        Mount(source="../volumes/logs", target="/logs", type="bind"),
+    #mounts = [
+    #    Mount(source="../volumes/emails", target="/emails", type="bind"),
+    #    Mount(source="../volumes/logs", target="/logs", type="bind"),
+    #],
+    volumes = [
+    "/home/admini/Documents/projects/helloAirflow/volumes/emails:/emails",
+    "/home/admini/Documents/projects/helloAirflow/volumes/logs:/logs"
     ]
 )
 
